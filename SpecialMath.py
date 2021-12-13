@@ -5,7 +5,13 @@ from flask_restful import Resource, Api
 class SpecialMath(Resource):
     @staticmethod
     def get(number):
-        return SpecialMath.special_math(number)
+        try:
+            int_number = int(number)
+            return SpecialMath.special_math(int_number)
+        except ValueError:
+            return "There is a problem with the value you entered. Is it not an integer?"
+        except Exception as e:
+            return "There was an unforeseen error %s." % repr(e)
 
     @staticmethod
     def special_math(n):
@@ -25,7 +31,7 @@ class SpecialMath(Resource):
 def main():
     app = Flask('Special Math')
     api = Api(app)
-    api.add_resource(SpecialMath, '/specialmath/<int:number>')
+    api.add_resource(SpecialMath, '/specialmath/<string:number>')
     app.run(port=5000)
 
 
